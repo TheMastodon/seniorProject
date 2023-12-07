@@ -168,7 +168,14 @@ def ssh_switch(ip, username, password):
         action = input("What would you like to do?")
         
     if action.lower() == "diagnostic":
-        pass
+        shell.send("show version\n")
+        time.sleep(2)
+        output = shell.recv(65535).decode("utf-8")
+        print(output)
+        shell.send("show interfaces status\n")
+        time.sleep(2)
+        output = shell.recv(65535).decode("utf-8")
+        print(output)
 
     if action.lower() == "custom":
         commands = []
@@ -189,7 +196,7 @@ def main():
     args = sys.argv[1:]
 
     if len(args) == 0 or args[0] == "-h" or args[0] == "--help":
-        print("This program will create commands that can be entered directly into the Cisco config terminal. You can enter the following:\n\nConfig - Set a large number of ports to OPEN by inputting a range or raw list of ports.\nReorder - Fix orders of descriptions\nRename - Adjust AP names to new standard (1/10/2023)\nDescription Fix\n\n\nExample of how to run: python config.py config\n")
+        print("This program will create commands that can be entered directly into the Cisco config terminal. You can enter the following:\n\nConfig - Set a large number of ports to OPEN by inputting a range or raw list of ports.\nReorder - Fix orders of descriptions\nRename - Adjust AP names to new standard (1/10/2023)\nDescription Fix\nSSH\n\n\nExample of how to run: python config.py config\n")
     elif args[0] == "config":
         path = input("Would you like to input a range or list of ports? (list, range):\n")
         if path == "range":
